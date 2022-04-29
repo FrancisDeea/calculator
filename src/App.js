@@ -1,4 +1,5 @@
 import './App.scss';
+import evaluation from './functions'
 import React from 'react';
 
 const operators = /[x÷+-]/;
@@ -8,6 +9,7 @@ class Calculator extends React.Component {
     super(props);
     this.handleClick = this.handleClick.bind(this);
     this.handleClear = this.handleClear.bind(this);
+    this.handleEvaluation = this.handleEvaluation.bind(this);
     this.state = {
       formula: [],
       previous: [],
@@ -17,6 +19,9 @@ class Calculator extends React.Component {
     }
   }
 
+  handleEvaluation() {
+    evaluation(this.state.formula);
+  }
 
   handleClear() {
     this.setState({
@@ -33,7 +38,8 @@ class Calculator extends React.Component {
     switch(value) {
       case String(value.match(numbers)):
         this.setState(state => ({
-          currentValue: Number(state.currentValue + value)
+          currentValue: Number(state.currentValue + value),
+          operator: ""
         }));
         break;
 
@@ -54,7 +60,7 @@ class Calculator extends React.Component {
         break;
       
       case String(value.match("=")):
-        this.handleClear();
+        this.handleEvaluation();
         break;
     }
   }
@@ -71,8 +77,7 @@ class Calculator extends React.Component {
         />
         <Buttons 
           onClick={this.handleClick}
-          getClear={this.handleClear}
-        
+          getClear={this.handleClear}        
         />
       </div>
     )
@@ -92,15 +97,13 @@ class Display extends React.Component {
         >
           {this.props.input}
         </div>
-        <div
-          id="display"
-        >
+        <div id="display">
           {
             this.props.result !== 0 
             ? this.props.result 
-            : this.props.current
-              ? this.props.current
-              : this.props.operator
+            : this.props.operator
+              ? this.props.operator
+              : this.props.current
           }
         </div>
       </div>
@@ -194,27 +197,9 @@ class Buttons extends React.Component {
           </button>
         </div>
         <div className="row">
-          <button
-            id="one"
-            value="1"
-            onClick={this.props.onClick}
-          >
-            1
-          </button>
-          <button
-            id="two"
-            value="2"
-            onClick={this.props.onClick}
-          >
-            2
-          </button>
-          <button
-            id="three"
-            value="3"
-            onClick={this.props.onClick}
-          >
-            3
-          </button>
+          <button id="one" value="1"onClick={this.props.onClick}>1</button>
+          <button id="two" value="2" onClick={this.props.onClick}>2</button>
+          <button id="three" value="3" onClick={this.props.onClick}>3</button>
           <button
             id="add"
             value="+"
@@ -256,6 +241,7 @@ function App() {
     <Calculator />
   )
 }
+var test = null;
 
 export default App;
 
